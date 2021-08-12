@@ -1,50 +1,60 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
+import styled from 'styled-components';
 
-
-type changeEvent = React.ChangeEvent<HTMLInputElement>;
 interface InputSampleProps {
     
 }
+interface userProps {
+    user: 
+    {
+        id?: number;
+        username?: string;
+        email?: string;
+    };
+}
 
+const StyledInputSample = styled.div`
+    
+`
+
+const users: userProps[] = [
+    {
+        user: {
+            id: 1,
+            username: 'velopert',
+            email: 'public.velopert@gmail.com'
+        }
+    },
+    {  user: {
+            id: 2,
+            username: 'tester',
+            email: 'tester@example.com'
+        }
+    },
+    {   user: {
+            id: 3,
+            username: 'liz',
+            email: 'liz@example.com'
+        }
+    }
+];
+
+const User = ({user}: userProps, key: number) => {
+    console.log(user);
+    return (
+        <div key={key}>
+            <b>{user.username}</b> <span>({user.email})</span>
+        </div>
+    );
+}
 const InputSample = () => {
-    const [inputs, setInputs] = useState({
-        name: '',
-        nickname: '',
-    });
-    const {name, nickname} = inputs;
-    const nameInput = useRef<HTMLInputElement>(null);
-
-    const onChange = (e: changeEvent) => {
-        const {name, value} = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value
-        });
-    }
-    const onReset = () => {
-        setInputs({
-            name: '',
-            nickname: '',
-        })
-        nameInput.current?.focus();
-    }
 
     return (
-            <div>
-                <input 
-                    name="name" 
-                    placeholder="이름" 
-                    onChange={onChange} 
-                    value={name} 
-                    ref={nameInput}
-                />
-                <input name="nickname" placeholder="닉네임" onChange={onChange} value={nickname} />
-                <button onClick={onReset}>초기화</button>
-                <div>
-                    <b>값: </b>
-                    {name} ({nickname})
-                </div>
-            </div>
+        <StyledInputSample>
+            {users.map( u => (
+                <User user={u.user} key={u.user.id}/>
+            ))}
+        </StyledInputSample>
     );
 }
 
