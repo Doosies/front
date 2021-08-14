@@ -19,30 +19,28 @@ interface UserProp {
 }
 
 
-const User = ({user, onDelete, onToggle}: UserProp) => {
-    useEffect(() => {
-        console.log("마운트");
-        return () => {
-            console.log("언마운트");
+const User = React.memo(
+    ({user, onDelete, onToggle}: UserProp) => {
+        console.log("update");
+    
+        return (
+            <div>
+                <b
+                    onClick={()=>onToggle(user.id)}
+                    style={{
+                        cursor: 'pointer',
+                        color:  user.active ? 'green' : 'black',
+                    }}
+                >
+                    {user.username}
+                </b> 
+                <span>({user.email})</span>
+                <button onClick={()=>onDelete(user.id)}>삭제</button>
+            </div>
+        );
     }
-    }, []);
-
-    return (
-        <div>
-            <b
-                onClick={()=>onToggle(user.id)}
-                style={{
-                    cursor: 'pointer',
-                    color:  user.active ? 'green' : 'black',
-                }}
-            >
-                {user.username}
-            </b> 
-            <span>({user.email})</span>
-            <button onClick={()=>onDelete(user.id)}>삭제</button>
-        </div>
-    );
-}
+);
+// const User = 
 
 const UserList = ({users, onDelete, onToggle}: UsersProps) => {
 
@@ -61,4 +59,4 @@ const UserList = ({users, onDelete, onToggle}: UsersProps) => {
     );
 }
 
-export default UserList;
+export default React.memo(UserList);

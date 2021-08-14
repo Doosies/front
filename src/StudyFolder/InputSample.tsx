@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import styled from 'styled-components';
 import UserList from './UserList';
 interface UserProps {
@@ -29,10 +29,12 @@ const userslists: UserProps[] = [
   }
 ];
 
+function countActiveUsers(users: UserProps[]): number {
+    return users.filter(user => user.active === true).length;
+}
 const InputSample = () => {
 
     const nextId = useRef<number>(4);
-    console.log(nextId.current);
 
     const refName = useRef<HTMLInputElement>(null);
     const [inputs, setInputs] = useState({
@@ -43,42 +45,56 @@ const InputSample = () => {
     });
     const [users, setUsers] = useState(userslists);
 
-    const handleCreate = () => {
-        const user: UserProps = {
-            id: Number(nextId.current),
-            username: inputs.username,
-            email: inputs.email,
-            active: false,
-        };
-        setUsers([...users,user]);
-        setInputs({
-            id: '',
-            username: '',
-            email: '',
-            active: false,
-        });
-        refName.current?.focus();
-        nextId.current += 1;
-    }
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value,
-        });
-    }
-    const handleDelete = (id: number) => {
-        setUsers(users.filter(user => user.id !== id));
-        nextId.current -= 1;
-    }
-    const handleToggle = (id: number) => {
-        setUsers(
-            users.map( v => 
-                v.id === id ? {...v, active: !v.active} : v
-            )
-        );
-        console.log(id,users);
-    }
+    const handleCreate = useCallback(
+        () => {
+            const user: UserProps = {
+                id: Number(nextId.current),
+                username: inputs.username,
+                email: inputs.email,
+                active: false,
+            };
+            setUsers([...users,user]);
+            setInputs({
+                id: '',
+                username: '',
+                email: '',
+                active: false,
+            });
+            refName.current?.focus();
+            nextId.current += 1;
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [inputs.email, inputs.username],
+    );
+    const handleChange = useCallback(
+        (e: React.ChangeEvent<HTMLInputElement>) => {
+            
+            const {name, value} = e.target;
+            setInputs({
+                ...inputs,
+                [name]: value,
+            });
+        },[inputs],
+    );
+    const handleDelete = useCallback(
+        (id: number) => {
+            setUsers(users.filter(user => user.id !== id));
+            nextId.current -= 1;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        },[],
+    );
+    const handleToggle = useCallback(
+        (id: number) => {
+            setUsers(
+                users.map( v => 
+                    v.id === id ? {...v, active: !v.active} : v
+                )
+            );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []
+    );
+
+    const count = useMemo(() => countActiveUsers(users), [users])
 
     return (
         <div>
@@ -95,8 +111,9 @@ const InputSample = () => {
             />
             <button name="생성" onClick={handleCreate}>생성</button>
             <UserList onToggle={handleToggle} onDelete={handleDelete} users={users}/>
+            <div>활성 사용자 수: {count}</div>
         </div>
     );
 }
 
-export default InputSample;
+export default (InputSample);
