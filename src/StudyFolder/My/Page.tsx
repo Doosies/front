@@ -8,7 +8,6 @@ import reducer from './UserReducer';
 // interface Inputs {username: string; email: string;}
 const Page = () => {
 
-    
     const [state, dispatch] = useReducer(reducer,{
         inputs: {username: '', email: ''},
         users: [
@@ -41,8 +40,10 @@ const Page = () => {
             value: e.target.value
         });
     }, []);
-    const handleCreate = useCallback(() => {
+    
+    const handleCreate = useCallback((ref: React.RefObject<HTMLInputElement>) => {
         dispatch({type:'ADD_USER'});
+        ref.current?.focus();
     }, []);
     const handleDelete = useCallback((id: number) => {
         dispatch({type: 'DELETE_USER', id});

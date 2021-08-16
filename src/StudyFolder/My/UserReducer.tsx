@@ -17,6 +17,11 @@ function reducer(state: State, action: Action):State {
         case 'ADD_USER':
             return {
                 ...state,
+                inputs: {
+                    ...state.inputs,
+                    username: '',
+                    email: '',
+                },
                 users: [
                         ...state.users,
                         {
