@@ -7,7 +7,7 @@ interface UsersListsProps {
     onDelete: (id: number) => void;
 }
 const UsersLists = ({users, onToggle, onDelete}:UsersListsProps) => {
-    console.log("list update");
+    // console.log("list update");
     return (
         <div>
             {users.map(u=> (

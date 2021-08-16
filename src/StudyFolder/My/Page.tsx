@@ -34,10 +34,22 @@ const Page = () => {
         nextId: 4,
     });
 
-    const handleChange = (e: ChangeEvent) => dispatch({type:'CHANGE_INPUT', name: e.target.name, value: e.target.value});
-    const handleCreate = () => dispatch({type:'ADD_USER'});
-    const handleDelete = (id: number) => dispatch({type: 'DELETE_USER', id});
-    const handleToggle = (id: number) => dispatch({type: 'TOGGLE_NAME', id});
+    const handleChange = useCallback((e: ChangeEvent) => {
+        dispatch({
+            type:'CHANGE_INPUT', 
+            name: e.target.name, 
+            value: e.target.value
+        });
+    }, []);
+    const handleCreate = useCallback(() => {
+        dispatch({type:'ADD_USER'});
+    }, []);
+    const handleDelete = useCallback((id: number) => {
+        dispatch({type: 'DELETE_USER', id});
+    }, []);
+    const handleToggle = useCallback((id: number) => {
+        dispatch({type: 'TOGGLE_NAME', id});
+    }, []);
     
 
     return (
