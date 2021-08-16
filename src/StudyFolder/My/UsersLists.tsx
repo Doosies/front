@@ -1,11 +1,6 @@
 import React, {} from 'react';
-import styled from 'styled-components';
 import User from './User';
 
-
-const StyledUsersLists = styled.div`
-    
-`
 interface UsersListsProps {
     users: User[];
     onToggle: (id: number) => void;
@@ -14,11 +9,11 @@ interface UsersListsProps {
 const UsersLists = ({users, onToggle, onDelete}:UsersListsProps) => {
     console.log("list update");
     return (
-        <StyledUsersLists>
+        <div>
             {users.map(u=> (
                 <User key={u.id} user={u} onToggle={onToggle} onDelete={onDelete}/>
             ))}
-        </StyledUsersLists>
+        </div>
     );
 }
 

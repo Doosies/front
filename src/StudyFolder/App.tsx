@@ -14,9 +14,9 @@ const App = () => {
         <StyledApp>
             {/* <Counter/> */}
             {/* <InputSample/> */}
-            {/* <Page/> */}
+            <Page/>
             {/* <Counter/> */}
-            <ReducerSample/>
+            {/* <ReducerSample/> */}
         </StyledApp>
     );
 };

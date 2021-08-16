@@ -1,93 +1,59 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useReducer, useRef, useState} from 'react';
 import styled from 'styled-components';
 import Input from './Input';
 import UsersLists from './UsersLists';
+import reducer from './UserReducer';
 
-const StyledPage = styled.div`
-    
-`
-
-const usersLists: User[] = [
-    {
-      id: 1,
-      username: 'velopert',
-      email: 'public.velopert@gmail.com',
-      active: false,
-    },
-    {
-      id: 2,
-      username: 'tester',
-      email: 'tester@example.com',
-      active: false,
-    },
-    {
-      id: 3,
-      username: 'liz',
-      email: 'liz@example.com',
-      active: false,
-    }
-  ];
 
 // interface Inputs {username: string; email: string;}
 const Page = () => {
 
-    const [inputs, setInputs] = useState({
-        username: '', email: '',
+    
+    const [state, dispatch] = useReducer(reducer,{
+        inputs: {username: '', email: ''},
+        users: [
+            {
+                id: 1,
+                username: 'velopert',
+                email: 'public.velopert@gmail.com',
+                active: false,
+            },
+            {
+                id: 2,
+                username: 'tester',
+                email: 'tester@example.com',
+                active: false,
+            },
+            {
+                id: 3,
+                username: 'liz',
+                email: 'liz@example.com',
+                active: false,
+            }
+        ],
+        nextId: 4,
     });
-    const [users, setUsers] = useState(usersLists);
-    const nextId = useRef<number>(4);
-    // const {username, email} = users;
-    
-    const handleChange = useCallback( (e: ChangeEvent) => {
-        const {name, value} = e.target;
 
-        setInputs( (prev: Input) => ({
-            ...prev,
-            [name]: value
-        }));
-    },[]);
-    
-    const handleCreate = useCallback( () => {
-        const newUser: User = {
-            id: nextId.current,
-            username: inputs.username,
-            email: inputs.email,
-            active: false,
-        };
-        setUsers((prev: User[]) => [...prev, newUser]);
-        nextId.current += 1;
-
-    },[inputs.email, inputs.username]);
-    
-    const handleDelete = useCallback( (id: number) => {
-        setUsers( (prvUsers: User[]) => 
-            prvUsers.filter( user => user.id !== id)
-        );
-        nextId.current -= 1;
-    },[]);
-    
-
-    const handleToggle = useCallback( (id: number) => {
-        setUsers((prev:User[]) => prev.map(
-            u => u.id === id ? {...u, active: !u.active} : u
-        ));
-    },[]);
+    const handleChange = (e: ChangeEvent) => dispatch({type:'CHANGE_INPUT', name: e.target.name, value: e.target.value});
+    const handleCreate = () => dispatch({type:'ADD_USER'});
+    const handleDelete = (id: number) => dispatch({type: 'DELETE_USER', id});
+    const handleToggle = (id: number) => dispatch({type: 'TOGGLE_NAME', id});
     
 
     return (
-        <StyledPage>
+        <div>
             <Input 
-                username={inputs.username}
-                email={inputs.email}
+                username={state.inputs.username}
+                email={state.inputs.email}
                 onChange={handleChange} 
                 onCreate={handleCreate}
             />
             <UsersLists 
-                users={users}
+                users={state.users}
                 onToggle={handleToggle}
                 onDelete={handleDelete}
             />
-        </StyledPage>
+        </div>
     );
 }
 
