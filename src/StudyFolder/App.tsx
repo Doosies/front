@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Counter from './Counter';
-import Hello from './Hello';
-import InputSample from './InputSample';
+import Counter from './My/Counter';
 import Page from './My/Page';
+import ReducerSample from './ReducerSample';
 
 const StyledApp = styled.div`
 
@@ -15,7 +14,9 @@ const App = () => {
         <StyledApp>
             {/* <Counter/> */}
             {/* <InputSample/> */}
-            <Page/>
+            {/* <Page/> */}
+            {/* <Counter/> */}
+            <ReducerSample/>
         </StyledApp>
     );
 };
