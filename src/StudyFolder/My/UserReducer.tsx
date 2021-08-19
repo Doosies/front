@@ -1,16 +1,21 @@
-import React, {useReducer} from 'react'
+import React, {useContext, useReducer} from 'react'
+import { Dispatch } from 'react';
 
 type State = {
     inputs: {username: string, email: string},
     users: User[],
     nextId: number,
 }
-
 type Action = 
     | {type: 'ADD_USER'}
     | {type: 'DELETE_USER', id: number}
     | {type: 'CHANGE_INPUT', name: string, value: string }
     | {type: 'TOGGLE_NAME', id: number};
+
+type UserDispatch = Dispatch<Action>;
+
+const UserStateContext = React.createContext<State | null>(null);
+const UserDispatchContext = React.createContext<UserDispatch | null>(null);
 
 function reducer(state: State, action: Action):State {
     switch(action.type) {
@@ -55,6 +60,50 @@ function reducer(state: State, action: Action):State {
     }
 }
 
+export function UserReducer({children}: {children: React.ReactNode}) {
+    const [state, dispatch] = useReducer( reducer, {
+        inputs: {username: '', email: ''},
+        users: [
+            {
+                id: 1,
+                username: 'velopert',
+                email: 'public.velopert@gmail.com',
+                active: false,
+            },
+            {
+                id: 2,
+                username: 'tester',
+                email: 'tester@example.com',
+                active: false,
+            },
+            {
+                id: 3,
+                username: 'liz',
+                email: 'liz@example.com',
+                active: false,
+            }
+        ],
+        nextId: 4,
+    });
 
-export default reducer;
-// 추가, 삭제, 인풋체인지, 토글
+    return (
+        <UserStateContext.Provider value={state}>
+            <UserDispatchContext.Provider value={dispatch}>
+                {children}
+            </UserDispatchContext.Provider>
+        </UserStateContext.Provider>
+    )
+}
+
+export function useUserState() {
+    const state = useContext(UserStateContext);
+    if (!state) throw new Error('Cannot find UserProvider');
+    return state;
+}
+
+export function useUserDispatch() {
+    const dispatch = useContext(UserDispatchContext);
+    if(!dispatch) throw new Error('Cannot find UserProvider');
+    return dispatch;
+}
+

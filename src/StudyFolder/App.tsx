@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Counter from './My/Counter';
 import Page from './My/Page';
+import { UserReducer } from './My/UserReducer';
 import ReducerSample from './ReducerSample';
 
 const StyledApp = styled.div`
@@ -14,7 +15,9 @@ const App = () => {
         <StyledApp>
             {/* <Counter/> */}
             {/* <InputSample/> */}
-            <Page/>
+            <UserReducer>
+                <Page/>
+            </UserReducer>
             {/* <Counter/> */}
             {/* <ReducerSample/> */}
         </StyledApp>
