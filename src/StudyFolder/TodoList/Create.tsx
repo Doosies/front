@@ -27,14 +27,14 @@ const CreateForm = styled.form`
     background-color: #F8F9FA;
 `;
 
-const CreateInput = styled.input`
+const CreateInput = React.memo(styled.input`
     width: 100%;
     padding: 12px;
     outline: none;
     border: 1px solid rgb(222, 226, 230);
-`;
+`);
 
-const CreateButton = styled.button<{open: boolean}>`
+const CreateButton = React.memo(styled.button<{open: boolean}>`
     width: 70px;
     height: 70px;
 
@@ -68,7 +68,7 @@ const CreateButton = styled.button<{open: boolean}>`
             background: #fa5252;
         }
     `}
-`;
+`);
 const Create = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [input, setinput] = useState('');
@@ -103,4 +103,4 @@ const Create = () => {
     );
 }
 
-export default Create;
+export default React.memo(Create);
