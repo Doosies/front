@@ -14,3 +14,14 @@ interface Input {
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
 type MouseEvent = React.MouseEvent<HTMLElement>;
+
+
+
+
+
+
+interface Todo {
+    id: number;
+    text: string;
+    done: boolean;
+}

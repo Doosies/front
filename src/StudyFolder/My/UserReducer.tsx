@@ -1,11 +1,14 @@
 import React, {useContext, useReducer} from 'react'
+import produce from 'immer';
 import { Dispatch } from 'react';
 
 type State = {
-    inputs: {username: string, email: string},
+    inputs: {username: string, email: string, [name: string]: string},
     users: User[],
     nextId: number,
 }
+
+
 type Action = 
     | {type: 'ADD_USER'}
     | {type: 'DELETE_USER', id: number}
@@ -17,7 +20,7 @@ type UserDispatch = Dispatch<Action>;
 const UserStateContext = React.createContext<State | null>(null);
 const UserDispatchContext = React.createContext<UserDispatch | null>(null);
 
-function reducer(state: State, action: Action):State {
+function reducerT(state: State, action: Action):State {
     switch(action.type) {
         case 'ADD_USER':
             return {
@@ -57,6 +60,37 @@ function reducer(state: State, action: Action):State {
                 ...state,
                 users: state.users.map( user => user.id === action.id ? {...user, active: !user.active} : user),
             }
+    }
+}
+function reducer (state: State, action: Action) {
+    switch (action.type) {
+        case 'ADD_USER':
+            return produce(state, draft => {
+                const newUser: User = {
+                    id: state.nextId,
+                    username: state.inputs.username,
+                    email: state.inputs.email,
+                    active: false,
+                };
+                draft.nextId ++;
+                draft.users.push(newUser);
+            });
+        case 'DELETE_USER':
+            return produce(state, draft => {
+                const idx = draft.users.findIndex( user => user.id === action.id);
+                draft.users.splice(idx,1);
+            });
+        case 'CHANGE_INPUT':
+            return produce(state, draft => {
+                draft.inputs[action.name] = action.value;
+            });
+        case 'TOGGLE_NAME':
+            return produce(state, draft => {
+                const user = draft.users.find(user => user.id === action.id);
+                if (user) user.active = !user.active;
+            })
+        default:
+            throw new Error('알수없는타입');
     }
 }
 

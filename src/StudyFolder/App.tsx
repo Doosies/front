@@ -1,25 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import Counter from './My/Counter';
-import Page from './My/Page';
-import { UserReducer } from './My/UserReducer';
-import ReducerSample from './ReducerSample';
+import GlobalStyle from '../GlobalStyle';
+import Main from './TodoList/Main';
+import { TodoReducer } from './TodoList/TodoReducer';
 
 const StyledApp = styled.div`
-
+    width: 100%;
+    height: 100%;
 `;
 
 const App = () => {
 
     return (
         <StyledApp>
-            {/* <Counter/> */}
-            {/* <InputSample/> */}
-            <UserReducer>
-                <Page/>
-            </UserReducer>
-            {/* <Counter/> */}
-            {/* <ReducerSample/> */}
+            <GlobalStyle/>
+            <TodoReducer>
+                <Main/>
+            </TodoReducer>
         </StyledApp>
     );
 };
